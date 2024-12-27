@@ -2,7 +2,7 @@
 from __future__ import annotations
 from ..grammar import Grammar, ProductionRule, EPSILON
 from ..parser import Parser
-
+from typing import Sequence
 # TODO: Not able to handle null productions, need to check that
 # NOTE: seems it is not possible to parse, as there will be conflicts
 
@@ -164,9 +164,10 @@ class LR0(Parser):
             print(row_str)
             print("-"*len(row_str))
 
-    def parse(self, input: str) -> bool:
+    def parse(self, input: Sequence[str]) -> bool:
         stack: list[str | int] = []
-        input = input + "$"
+        input = list(input)
+        input.append("$")
         look_at = 0
         stack.append(0)
         if not self.table:

@@ -146,7 +146,7 @@ if __name__ == '__main__':
     D -> cSd | e
     """, {"a", "b", "c", "d", "e"}, {"S", "B", "A", "D", "C"})
     ll1_1 = LL1(g1, True)
-    ll1_1.parse([x for x in "cebeaed"])
+    ll1_1.parse("cebeaed")
     g2 = Grammar.from_string(f"""
     E -> TP
     P -> +TP | {EPSILON}
