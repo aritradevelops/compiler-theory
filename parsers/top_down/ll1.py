@@ -1,6 +1,7 @@
 from ..grammar import Grammar, ProductionRule, EPSILON
 from ..parser import Parser
 from ..utils import First, Follow, is_left_factored
+from typing import Sequence
 
 
 class LL1(Parser):
@@ -88,14 +89,14 @@ class LL1(Parser):
             print(row_str)
             print("-"*len(row_str))
 
-    def parse(self, input: str) -> bool:
+    def parse(self, input: Sequence[str]) -> bool:
         tape = list(x for x in input)
         tape.append("$")
         tape_ptr = 0
         stack: list[str] = []
         table = self._parse_table
         stack.append("$")
-        stack.append("S")
+        stack.append(self.grammar.start_symbol)
         if self.logging:
             print(
                 f"Start Parsing: tape -> {tape[tape_ptr:]}, stack -> {stack}")
@@ -137,12 +138,21 @@ class LL1(Parser):
 
 
 if __name__ == '__main__':
-    g = Grammar.from_string(f"""
+    g1 = Grammar.from_string(f"""
     S -> BA
     A -> aBA | {EPSILON}
     B -> DC
     C -> bDC | {EPSILON}
     D -> cSd | e
     """, {"a", "b", "c", "d", "e"}, {"S", "B", "A", "D", "C"})
-    ll0 = LL1(g, True)
-    ll0.parse("cebeaed")
+    ll1_1 = LL1(g1, True)
+    ll1_1.parse([x for x in "cebeaed"])
+    g2 = Grammar.from_string(f"""
+    E -> TP
+    P -> +TP | {EPSILON}
+    T -> FQ
+    Q -> *FQ | {EPSILON}
+    F -> (E) | id
+    """, {"+", "*", "(", ")", "id"}, {"E", "P", "T", "Q", "F"}, "E")
+    ll1_2 = LL1(g2, True)
+    ll1_2.parse(["id", "+", "id", "*", "id"])

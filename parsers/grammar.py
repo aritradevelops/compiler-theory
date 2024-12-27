@@ -35,8 +35,9 @@ class ProductionRule:
             if rhs_str[i] in terminals or rhs_str[i] in non_terminals:
                 rhs.append(rhs_str[i])
             else:
-                for j in range(i+1, len(rhs_str)):
-                    if rhs_str[i:j] in terminals or rhs_str in non_terminals:
+                for j in range(i+1, len(rhs_str)+1):
+                    if rhs_str[i:j] in terminals or rhs_str[i:j] in non_terminals:
+                        rhs.append(rhs_str[i:j])
                         i = j
                         break
             i += 1
